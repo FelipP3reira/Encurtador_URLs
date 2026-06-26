@@ -18,4 +18,8 @@ export const criarLinkSchema = z.object({
   senha: z.string().min(4, 'A senha do link precisa de ao menos 4 caracteres.').max(200).optional(),
 });
 
+export const desbloquearSchema = z.object({
+  senha: z.string().min(1, 'Informe a senha.'),
+});
+
 export type CriarLink = z.infer<typeof criarLinkSchema>;
