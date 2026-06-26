@@ -4,6 +4,7 @@ import Fastify, { type FastifyInstance } from 'fastify';
 
 import { config } from './config/env.js';
 import { linksRotas } from './modules/links/links.rotas.js';
+import { redirectRotas } from './modules/links/redirect.rotas.js';
 import { registrarTratamentoDeErro } from './shared/http/erro-handler.js';
 import { montarCorpoErro } from './shared/http/resposta-erro.js';
 
@@ -30,6 +31,9 @@ export async function criarApp(): Promise<FastifyInstance> {
   app.get('/health', () => ({ status: 'ok' }));
 
   await app.register(linksRotas, { prefix: '/v1/links' });
+  // Redirect na raiz — registrado por último; rotas estáticas (/health, /v1/*)
+  // têm prioridade sobre o parâmetro /:slug no Fastify.
+  await app.register(redirectRotas);
 
   return app;
 }
