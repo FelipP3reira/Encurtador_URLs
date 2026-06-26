@@ -22,4 +22,15 @@ export const desbloquearSchema = z.object({
   senha: z.string().min(1, 'Informe a senha.'),
 });
 
+export const statsQuerySchema = z
+  .object({
+    de: z.coerce.date().optional(),
+    ate: z.coerce.date().optional(),
+  })
+  .refine((q) => q.de === undefined || q.ate === undefined || q.de <= q.ate, {
+    message: 'de não pode ser depois de ate.',
+    path: ['de'],
+  });
+
 export type CriarLink = z.infer<typeof criarLinkSchema>;
+export type StatsQuery = z.infer<typeof statsQuerySchema>;
